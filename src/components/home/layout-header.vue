@@ -5,10 +5,10 @@
             <span>江苏传智播客教育科技股份有限公司</span>
         </el-col>
         <el-col :span="3" class="right">
-            <div class="head-img"></div>
+            <img class='head-img' :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
             <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
-                    用户名<i class="el-icon-arrow-down el-icon--right"></i>
+                    {{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>个人信息</el-dropdown-item>
@@ -22,7 +22,26 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      userInfo: {},
+      defaultImg: require('../../assets/img/avatar.jpg')
+    }
+  },
+  methods: {
+    getUserInfo () {
+      let token = window.localStorage.getItem('user-token')
+      this.$axios({
+        url: '/user/profile',
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).then(res => {
+        this.userInfo = res.data.data
+      })
+    }
+  },
+  created () {
+    this.getUserInfo()
+  }
 }
 </script>
 
@@ -46,7 +65,6 @@ export default {
         margin-right:10px;
         width:40px;
         height:40px;
-        background: url('../../assets/img/avatar.jpg');
       }
     }
 }
