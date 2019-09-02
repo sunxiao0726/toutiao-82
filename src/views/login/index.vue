@@ -10,7 +10,7 @@
                     <el-input placeholder="请输入手机号" v-model="loginForm.mobile"></el-input>
                 </el-form-item>
                 <el-form-item prop="code">
-                    <el-input style="width:250px" placeholder="请输入验证码" v-model="loginForm.code"></el-input>
+                    <el-input style="width:280px" placeholder="请输入验证码" v-model="loginForm.code"></el-input>
                      <el-button style="float:right">发送验证码</el-button>
                 </el-form-item>
                 <el-form-item prop="check">
@@ -47,9 +47,9 @@ export default {
       // key(字段名):value(数组对象=> 多个 => 一个字段 可能有一个或者多个校验规则)
       loginRules: {
         mobile: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
-          { len: 11, message: '手机长度必须为11个字符', trigger: 'blur' },
-          { pattern: /^1[3456789]\d{9}$/, message: '手机号格式错误', trigger: 'blur' }
+          { required: true, message: '请输入手机号' },
+          { len: 11, message: '手机长度必须为11个字符' },
+          { pattern: /^1[3456789]\d{9}$/, message: '手机号格式错误' }
         ],
         code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
