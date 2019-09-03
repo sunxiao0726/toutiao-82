@@ -6,9 +6,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './style/index.less'
 
-import Axios from 'axios'
+import Axios from './utils/axios.config'
 
-Axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 Vue.prototype.$axios = Axios
 
 Vue.config.productionTip = false
