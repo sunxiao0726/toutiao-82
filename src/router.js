@@ -8,17 +8,19 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      redirect: '/home'
-    }, {
       path: '/login',
       component: Login
-    }, {
+    },
+    {
+      path: '/',
+      redirect: '/home'
+    },
+    {
       path: '/home',
-      name: 'home',
+      // name: 'home',
       component: Home,
       children: [{
-        path: '',
+        path: '', // 默认的二级路由  的地址 path为空串
         component: Main
       }]
     }
