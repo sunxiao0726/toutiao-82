@@ -74,7 +74,7 @@ export default {
             data: this.loginForm
           }).then(res => {
             // 将token保存在前端（本地存储）
-            window.localStorage.setItem('user-token', res.data.data.token)
+            window.localStorage.setItem('user-token', res.data.token)
             this.$router.push('/')
           }).catch(() => {
             this.$message({
