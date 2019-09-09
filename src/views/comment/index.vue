@@ -1,9 +1,14 @@
 <template>
-<el-card>
+<!-- 最外层 用el-card卡片做页面 -->
+<el-card v-loading="loading">
+   <!-- 插槽内容 => 标题 -->
     <bread-crumb slot="header">
+     <!-- 面包屑的具名插槽 -->
         <template slot="title">评论列表</template>
     </bread-crumb>
+    <!-- 表格 需要数据 :data-->
     <el-table :data="list" >
+      <!-- formatter是el-table-column属性 -->
       <el-table-column
         prop="title"
         label="标题"
@@ -23,6 +28,7 @@
         label="粉丝评论数">
       </el-table-column>
       <el-table-column label="操作">
+        <!-- 作用域插槽 slot-scope="变量" 变量  就是 row,column,$index.store的属性集合 obj.row -->
           <template slot-scope="obj">
             <el-button size="small" type="text">修改</el-button>
             <el-button size="small" type="text"
@@ -34,6 +40,7 @@
       </el-table-column>
     </el-table>
     <el-row type="flex" justify="center" style='margin:15px 0'>
+      <!-- 分页组件  current-page当前页码 每页显示多少条 page-size total 总数 -->
       <el-pagination background layout="prev, pager, next"
       :total="page.total"
       :current-page="page.page"
@@ -52,10 +59,11 @@ export default {
     return {
       list: [],
       page: {
-        page: 1,
-        pageSize: 10,
-        total: 0
-      }
+        page: 1, // 当前页码
+        pageSize: 10, // 当前每页条数
+        total: 0 // 总条数
+      },
+      loading: false// 控制进度条的状态
 
     }
   },
@@ -87,16 +95,18 @@ export default {
       return row.comment_status ? '正常' : '关闭'
     },
     getComments () {
+      this.loading = true // 请求数据之前 把进度条打开(加载状态)
+      // query参数 就相当于get参数 路径参数 url参数 params
+      // body 路径参数  data
       this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.page.page, per_page: this.page.pageSize }
       }).then(res => {
         this.list = res.data.results
-
+        this.loading = false // 响应数据之后关系
         this.page.total = res.data.total_count
       })
     }
-
   },
   created () {
     this.getComments()
