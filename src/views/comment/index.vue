@@ -33,6 +33,16 @@
           </template>
       </el-table-column>
     </el-table>
+    <el-row type="flex" justify="center" style='margin:15px 0'>
+      <el-pagination background layout="prev, pager, next"
+      :total="page.total"
+      :current-page="page.page"
+      :page-size="page.pageSize"
+      @current-change='changePage'
+      @prev-click='changePage'
+      @next-click='changePage'>
+      </el-pagination>
+    </el-row>
 </el-card>
 </template>
 
@@ -40,20 +50,34 @@
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      page: {
+        page: 1,
+        pageSize: 10,
+        total: 0
+      }
+
     }
   },
   methods: {
+    // 改变页码触发的事件
+    changePage (newPage) {
+      // 给当前页码更新最新值
+      this.page.page = newPage
+      this.getComments()
+    },
+    // 打开或者关闭评论
     openOrClose (row) {
       let mess = row.comment_status ? '关闭' : '打开'
       this.$confirm(`是否要${mess}评论?`, '提示', {
         type: 'warning'
       }).then(() => {
+        // 写调用接口
         this.$axios({
           url: '/comments/status',
-          methon: 'put',
-          params: { article_id: row.id },
-          data: { allow_comment: !row.comment_status }
+          method: 'put',
+          params: { article_id: row.id.toString() }, // 传递articleId参数
+          data: { allow_comment: !row.comment_status }// 取反 因为当前如果是true  只能改成false , 如果是false 改成true
         }).then(res => {
           this.getComments()
         })
@@ -65,9 +89,11 @@ export default {
     getComments () {
       this.$axios({
         url: '/articles',
-        params: { response_type: 'comment' }
+        params: { response_type: 'comment', page: this.page.page, per_page: this.page.pageSize }
       }).then(res => {
         this.list = res.data.results
+
+        this.page.total = res.data.total_count
       })
     }
 
