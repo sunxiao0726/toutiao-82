@@ -23,13 +23,6 @@
             </div>
           </el-tab-pane>
         </el-tabs>
-        <el-row>
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :total="1000">
-          </el-pagination>
-        </el-row>
    </el-card>
 </template>
 
