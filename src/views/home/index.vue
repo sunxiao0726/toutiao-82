@@ -2,12 +2,12 @@
   <div>
       <el-container>
         <!-- 左侧导航 -->
-        <el-aside class="aside" style="width:201px">
+        <el-aside class="aside" style="width:201px;background-color:#323745">
           <layout-aside></layout-aside>
         </el-aside>
 
         <!-- 右侧大盒子 -->
-        <el-container style="height=100vh,overflow:hidden">
+        <el-container style="overflow:hidden">
           <!-- 头部 -->
           <el-header>
             <layout-header></layout-header>
@@ -28,5 +28,5 @@ export default {
 </script>
 
 <style>
-
+background-color: #fff;
 </style>
