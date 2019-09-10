@@ -23,6 +23,17 @@
             </div>
           </el-tab-pane>
         </el-tabs>
+        <el-row type="flex" justify="center">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="page.total"
+            :page-size='page.pageSize'
+            :current-page="page.page"
+            @current-change="changePage"
+            >
+          </el-pagination>
+        </el-row>
    </el-card>
 </template>
 
@@ -31,22 +42,36 @@ export default {
   data () {
     return {
       activeName: 'all',
-      list: []
+      list: [],
+      page: {
+        page: 1,
+        pageSize: 10,
+        total: 0
+      }
     }
   },
   methods: {
+    // 改变当前页
+    changePage (newPage) {
+      this.page.page = newPage
+      this.getMaterial()
+    },
     // 切换页签
     changeTab () {
+      this.page.page = 1
       this.getMaterial()
     },
     getMaterial () {
       this.$axios({
         url: '/user/images',
         params: {
+          page: this.page.page,
+          per_page: this.page.pageSize,
           collect: this.activeName === 'collect'
         }
       }).then(res => {
         this.list = res.data.results
+        this.page.total = res.data.total_count
       })
     }
   },
