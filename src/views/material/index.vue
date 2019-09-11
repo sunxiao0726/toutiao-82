@@ -9,8 +9,8 @@
               <el-card v-for="item in list" :key="item.id" class="img-card">
                 <img :src="item.url" alt="">
                 <el-row type="flex" justify="space-around" class="operate" align="middle">
-                  <i class="el-icon-star-on" :style="{color: item.is_collected ? 'red' : ''}"></i>
-                  <i class="el-icon-delete-solid"></i>
+                  <i @click='collectOrCancel(item)' class="el-icon-star-on" :style="{color: item.is_collected ? 'red' : ''}"></i>
+                  <i @click='delImg(item)' class="el-icon-delete-solid"></i>
                 </el-row>
               </el-card>
             </div>
@@ -51,6 +51,36 @@ export default {
     }
   },
   methods: {
+    // 收藏或者取消收藏
+    collectOrCancel (item) {
+      let mess = item.is_collected ? '取消' : ''
+      this.$confirm(`您确定要${mess}收藏这张图片?`, '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.$axios({
+          url: `user/images/${item.id}`,
+          method: 'put',
+          data: {
+            collect: !item.is_collected
+          }
+        }).then(() => {
+          this.getMaterial()
+        })
+      })
+    },
+    // 删除图片
+    delImg (item) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.$axios({
+          url: `user/images/${item.id}`,
+          method: 'delete'
+        }).then(() => {
+          this.getMaterial()
+        })
+      })
+    },
     // 改变当前页
     changePage (newPage) {
       this.page.page = newPage
@@ -70,6 +100,7 @@ export default {
           collect: this.activeName === 'collect'
         }
       }).then(res => {
+        console.log(res)
         this.list = res.data.results
         this.page.total = res.data.total_count
       })
